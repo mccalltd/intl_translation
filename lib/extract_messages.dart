@@ -134,7 +134,7 @@ class MessageFindingVisitor extends GeneralizingAstVisitor {
   /// meaning we're running in the transformer.
   bool generateNameAndArgs = false;
 
-  bool forceName = false;
+  bool forceRewrite = false;
 
   /// We keep track of the data from the last MethodDeclaration,
   /// FunctionDeclaration or FunctionExpression that we saw on the way down,
@@ -357,7 +357,8 @@ class MessageFindingVisitor extends GeneralizingAstVisitor {
     // We only rewrite messages with parameters, otherwise we use the literal
     // string as the name and no arguments are necessary.
     if (!message.hasName) {
-      if ((generateNameAndArgs && message.arguments.isNotEmpty) || forceName) {
+      if (forceRewrite ||
+          (generateNameAndArgs && message.arguments.isNotEmpty)) {
         // Always try for class_method if this is a class method and
         // generating names/args.
         message.name = Message.classPlusMethodName(node, name) ?? name;
